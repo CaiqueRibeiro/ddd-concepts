@@ -1,7 +1,8 @@
 // UMA ENTIDADE SEMPRE DEVE SE AUTOVALIDAR
 import Address from '../value-objects/address';
+import CustomerInterface from './customer.interface';
 
-export default class Customer {
+export default class Customer implements CustomerInterface {
 
   private _id: string;
   private _name: string = "";
