@@ -1,23 +1,24 @@
 // UMA ENTIDADE SEMPRE DEVE SE AUTOVALIDAR
+import Entity from '../../@shared/entities/entity.abstract';
+import NotificationError from '../../@shared/notification/notification.error';
 import Address from '../value-objects/address';
-import CustomerInterface from './customer.interface';
 
-export default class Customer implements CustomerInterface {
+export default class Customer extends Entity {
 
-  private _id: string;
   private _name: string = "";
   private _address!: Address;
   private _active: boolean = false;
   private _rewardPoints: number = 0;
 
   constructor(id: string, name: string) {
+    super();
     this._id = id
     this._name = name;
     this.validate();
-  }
 
-  get id(): string {
-    return this._id;
+    if(this._notification.hasErrors()) {
+      throw new NotificationError(this._notification.getErrors());
+    }
   }
 
   get name(): string {
@@ -34,10 +35,17 @@ export default class Customer implements CustomerInterface {
 
   validate(): boolean {
     if (this._id.length === 0) {
-      throw new Error('Id is required');
+      this._notification.addError({
+        context: 'customer',
+        message: 'Id is required',
+      });
     }
+
     if (this._name.length === 0) {
-      throw new Error('Name is required');
+      this._notification.addError({
+        context: 'customer',
+        message: 'Name is required',
+      });
     }
 
     return true;
