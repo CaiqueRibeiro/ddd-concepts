@@ -1,6 +1,7 @@
 // UMA ENTIDADE SEMPRE DEVE SE AUTOVALIDAR
 import Entity from '../../@shared/entities/entity.abstract';
 import NotificationError from '../../@shared/notification/notification.error';
+import CustomerValidatorFactory from '../factories/customer.validator.factory';
 import Address from '../value-objects/address';
 
 export default class Customer extends Entity {
@@ -33,22 +34,8 @@ export default class Customer extends Entity {
     return this._rewardPoints;
   }
 
-  validate(): boolean {
-    if (this._id.length === 0) {
-      this._notification.addError({
-        context: 'customer',
-        message: 'Id is required',
-      });
-    }
-
-    if (this._name.length === 0) {
-      this._notification.addError({
-        context: 'customer',
-        message: 'Name is required',
-      });
-    }
-
-    return true;
+  validate(): void {
+    CustomerValidatorFactory.create().validate(this);
   }
 
   changeName(name: string): void {
